@@ -70,18 +70,22 @@ var hideMarkers = function() {
 	activeMarkers.forEach(function(marker) {
 		marker.setMap(null);
 	});
-	activeMarkers = [];
 };
 
 var removeMarker = function(name){
-	activeMarkers.forEach(function(marker, index){
-		if(marker.title === name){
-			marker.setMap(null);
-			activeMarkers.splice(index, 1);
-		}
 
-	});
-	showMarkers();
+	for(var i in activeMarkers) {
+		if(activeMarkers[i].title === name){
+			activeMarkers[i].setMap(null);
+			activeMarkers.splice(i, 1);
+			break;
+		}
+	}
+	if(activeMarkers.length){
+		showMarkers();
+	} else {
+
+	}
 }
 
 var addHotel = function(newHotelName, shouldSave){
@@ -106,13 +110,16 @@ var addHotel = function(newHotelName, shouldSave){
 var addRestaurant = function(newRestaurantName, shouldSave){
 	var restaurantList = $('#restaurant-list'),
 		newElement = '<div class="itinerary-item"><span class="title">' + newRestaurantName + '</span><button class="btn btn-xs btn-danger remove btn-circle">x</button></div>';	
-	restaurantList.append(newElement);
-	if (shouldSave) {
-		todaysItinerary = getTodaysItinerary();
-		todaysItinerary.restaurants.push(newRestaurantName);	
-	}
-	activeMarkers.push(addMarker(restaurants, newRestaurantName, 'restaurants'));
-	showMarkers();
+	if(restaurantList.children().length < 3){
+		restaurantList.append(newElement);
+		if (shouldSave) {
+			todaysItinerary = getTodaysItinerary();
+			todaysItinerary.restaurants.push(newRestaurantName);	
+		}
+		activeMarkers.push(addMarker(restaurants, newRestaurantName, 'restaurants'));
+		showMarkers();
+		
+	} else alert('You can only visit three restaurant in one day');
 
 }
 
