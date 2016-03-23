@@ -33,15 +33,14 @@ function initialize_gmaps() {
     var marker = new google.maps.Marker(opts);
   }
 
-  var hotelLocation = [40.705137, -74.007624];
+  var hotelLocation = [
+  ];
+
   var restaurantLocations = [
-        [40.705137, -74.013940],
-        [40.708475, -74.010846]
-      ];
+  ];
+  
   var activityLocations = [
-        [40.716291, -73.995315],
-        [40.707119, -74.003602]
-      ];
+  ];
 
   drawLocation(hotelLocation, {
     icon: '/images/lodging_0star.png'
