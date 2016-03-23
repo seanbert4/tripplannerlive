@@ -13,6 +13,7 @@ var map = initialize_gmaps();
 var activeMarkers = [];
 
 
+
 // Functions
 var getTodaysItinerary = function() {
 	var returnArray = model.filter(function(dayItin) {
@@ -57,9 +58,12 @@ var addMarker = function(array, name, category) {
 }
 
 var showMarkers = function() {
+	var bounds = new google.maps.LatLngBounds();
 	activeMarkers.forEach(function(marker) {
+		bounds.extend(marker.position);
 		marker.setMap(map);
 	})
+	map.fitBounds(bounds);
 };
 
 var hideMarkers = function() {
@@ -68,6 +72,17 @@ var hideMarkers = function() {
 	});
 	activeMarkers = [];
 };
+
+var removeMarker = function(name){
+	activeMarkers.forEach(function(marker, index){
+		if(marker.title === name){
+			marker.setMap(null);
+			activeMarkers.splice(index, 1);
+		}
+
+	});
+	showMarkers();
+}
 
 var addHotel = function(newHotelName, shouldSave){
 	var hotelList = $('#hotel-list');
@@ -140,12 +155,14 @@ $('#activity-btn').on('click', function(){
 
 // Removing elements from the control panel and map
 $('#hotel-list').on('click', 'button', function() {
+	removeMarker($(this).prev().text());
 	$('#hotel-list').empty();
 	todaysItinerary = getTodaysItinerary();
 	todaysItinerary.hotel = "";
 })
 
 $('#restaurant-list').on('click', 'button', function(event) {
+	removeMarker($(this).prev().text());
 	$(this).parent().remove();
 	var restaurantToRemove = $(this).prev().text();
 	todaysItinerary = getTodaysItinerary();
@@ -155,6 +172,7 @@ $('#restaurant-list').on('click', 'button', function(event) {
 })
 
 $('#activity-list').on('click', 'button', function(event) {
+	removeMarker($(this).prev().text());
 	$(this).parent().remove();
 	var activityToRemove = $(this).prev().text();
 	todaysItinerary = getTodaysItinerary();
@@ -226,6 +244,7 @@ $('#day-title').children().last().on('click', function(){
 	$('#restaurant-list').empty();
 	$('#activity-list').empty();
 	$('#day-title').children().first().text('Day ' + currentDay);
+	hideMarkers();
 	todaysItinerary = getTodaysItinerary();
 	addHotel(todaysItinerary.hotel, false);
 	todaysItinerary.restaurants.forEach(function(restaurant) {
