@@ -17,6 +17,7 @@ function initialize_gmaps() {
   // initialize a new Google Map with the options
   var map = new google.maps.Map(map_canvas_obj, mapOptions);
 
+
   // add the marker to the map
   var marker = new google.maps.Marker({
     position: myLatlng,
@@ -55,11 +56,8 @@ function initialize_gmaps() {
       icon: '/images/star-3.png'
     });
   });
+  return map;
 }
-
-$(document).ready(function() {
-  initialize_gmaps();
-});
 
 // var styleArr = [{
 //   featureType: 'landscape',
